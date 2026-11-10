@@ -1,1 +1,1 @@
-loadstring(game:HttpGet("https://raw.githubusercontent.com/bys0syete/fucking/main/darkspot"))()
+loadstring(game:HttpGet("https://raw.githubusercontent.com/darksp0t-gg/fucking/main/darkspot"))()
