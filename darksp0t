@@ -1,0 +1,204 @@
+
+local acceso = "darksp0t22"
+local DISCORD_LINK = "https://discord.gg/N84xzUR3U"
+
+local Players = game:GetService("Players")
+local CoreGui = game:GetService("CoreGui")
+local GuiService = game:GetService("GuiService")
+
+local gui = Instance.new("ScreenGui")
+gui.Name = "Darksp0tTeamKey"
+gui.ResetOnSpawn = false
+gui.Parent = CoreGui
+
+local frame = Instance.new("Frame")
+frame.Size = UDim2.new(0, 320, 0, 215)
+frame.Position = UDim2.new(0.5, -160, 0.5, -107)
+frame.BackgroundColor3 = Color3.fromRGB(18, 18, 18)
+frame.BorderSizePixel = 0
+frame.Parent = gui
+
+local corner = Instance.new("UICorner")
+corner.CornerRadius = UDim.new(0, 10)
+corner.Parent = frame
+
+local title = Instance.new("TextLabel")
+title.Size = UDim2.new(1, 0, 0, 45)
+title.BackgroundTransparency = 1
+title.Text = "DARKSP0T TEAM"
+title.TextColor3 = Color3.new(1, 1, 1)
+title.TextSize = 22
+title.Font = Enum.Font.GothamBold
+title.Parent = frame
+
+local input = Instance.new("TextBox")
+input.Size = UDim2.new(0, 270, 0, 38)
+input.Position = UDim2.new(0, 25, 0, 55)
+input.BackgroundColor3 = Color3.fromRGB(35, 35, 35)
+input.TextColor3 = Color3.new(1, 1, 1)
+input.PlaceholderText = "Enter Key..."
+input.Text = ""
+input.TextSize = 14
+input.Font = Enum.Font.Gotham
+input.Parent = frame
+
+local button = Instance.new("TextButton")
+button.Size = UDim2.new(0, 270, 0, 38)
+button.Position = UDim2.new(0, 25, 0, 108)
+button.BackgroundColor3 = Color3.fromRGB(120, 40, 180)
+button.TextColor3 = Color3.new(1, 1, 1)
+button.Text = "UNLOCK"
+button.TextSize = 15
+button.Font = Enum.Font.GothamBold
+button.Parent = frame
+
+local discord = Instance.new("TextButton")
+discord.Size = UDim2.new(0, 270, 0, 30)
+discord.Position = UDim2.new(0, 25, 0, 158)
+discord.BackgroundColor3 = Color3.fromRGB(65, 90, 180)
+discord.TextColor3 = Color3.new(1, 1, 1)
+discord.Text = "JOIN OUR DISCORD"
+discord.TextSize = 13
+discord.Font = Enum.Font.GothamBold
+discord.Parent = frame
+
+discord.MouseButton1Click:Connect(function()
+    if setclipboard then
+        setclipboard(DISCORD_LINK)
+    end
+    GuiService:OpenBrowserWindow(DISCORD_LINK)
+end)
+
+local status = Instance.new("TextLabel")
+status.Size = UDim2.new(1, 0, 0, 20)
+status.Position = UDim2.new(0, 0, 1, 0)
+status.BackgroundTransparency = 1
+status.Text = ""
+status.TextColor3 = Color3.new(1, 0.2, 0.2)
+status.TextSize = 12
+status.Parent = frame
+
+local unlocked = false
+
+button.MouseButton1Click:Connect(function()
+    if input.Text == acceso then
+        unlocked = true
+        gui:Destroy()
+    else
+        status.Text = "Wrong Key!"
+        input.Text = ""
+    end
+end)
+
+repeat task.wait() until unlocked
+
+local RunService = game:GetService("RunService")
+local UserInputService = game:GetService("UserInputService")
+local StarterGui = game:GetService("StarterGui")
+local VirtualInputManager = game:GetService("VirtualInputManager")
+
+local player = Players.LocalPlayer
+
+local autoFarmEnabled = true
+local isDashing = false
+
+local NORMAL_WALK_SPEED = 35
+local DASH_WALK_SPEED = 75
+local JUMP_POWER = 50
+
+StarterGui:SetCore("SendNotification", {
+    Title = "DARKSP0T TEAM",
+    Text = "Fixed E-Dash!\nHigher dash speed | Normal jump\nPress V to toggle",
+    Duration = 8
+})
+
+print("DARKSP0T TEAM loaded! Press V to start/stop dash")
+
+RunService.Heartbeat:Connect(function()
+    local char = player.Character
+    if not char then return end
+
+    local humanoid = char:FindFirstChild("Humanoid")
+    if not humanoid then return end
+
+    if autoFarmEnabled and not isDashing then
+        humanoid.WalkSpeed = NORMAL_WALK_SPEED
+        humanoid.JumpPower = JUMP_POWER
+    end
+
+    if humanoid.Health <= 0 or humanoid:GetState() == Enum.HumanoidStateType.Dead then
+        task.wait(0.5)
+        humanoid:ChangeState(Enum.HumanoidStateType.Running)
+    end
+
+    if isDashing then
+        humanoid.WalkSpeed = DASH_WALK_SPEED
+
+        if humanoid:GetState() == Enum.HumanoidStateType.Landed or
+           humanoid:GetState() == Enum.HumanoidStateType.Running then
+            task.spawn(function()
+                task.wait(0.035)
+                if humanoid.Health > 0 then
+                    humanoid:ChangeState(Enum.HumanoidStateType.Jumping)
+                end
+            end)
+        end
+    end
+end)
+
+UserInputService.InputBegan:Connect(function(input, gp)
+    if gp then return end
+    if input.KeyCode ~= Enum.KeyCode.V then return end
+
+    isDashing = not isDashing
+
+    local char = player.Character
+    if not char then isDashing = false; return end
+
+    local humanoid = char:FindFirstChild("Humanoid")
+    if not humanoid then isDashing = false; return end
+
+    if isDashing then
+        StarterGui:SetCore("SendNotification", {
+            Title = "DARKSP0T TEAM",
+            Text = "Emote Dash STARTED (High Speed)",
+            Duration = 3
+        })
+
+        VirtualInputManager:SendKeyEvent(true, Enum.KeyCode.G, false, game)
+        task.wait(0.1)
+        VirtualInputManager:SendKeyEvent(false, Enum.KeyCode.G, false, game)
+
+        task.wait(0.12)
+        VirtualInputManager:SendKeyEvent(true, Enum.KeyCode.Two, false, game)
+        task.wait(0.06)
+        VirtualInputManager:SendKeyEvent(false, Enum.KeyCode.Two, false, game)
+
+        VirtualInputManager:SendKeyEvent(true, Enum.KeyCode.LeftControl, false, game)
+
+    else
+        StarterGui:SetCore("SendNotification", {
+            Title = "DARKSP0T TEAM",
+            Text = "Emote Dash STOPPED",
+            Duration = 3
+        })
+
+        VirtualInputManager:SendKeyEvent(false, Enum.KeyCode.LeftControl, false, game)
+        humanoid.WalkSpeed = NORMAL_WALK_SPEED
+    end
+end)
+
+UserInputService.InputBegan:Connect(function(input, gp)
+    if gp then return end
+    if input.KeyCode == Enum.KeyCode.RightShift then
+        autoFarmEnabled = not autoFarmEnabled
+
+        StarterGui:SetCore("SendNotification", {
+            Title = "DARKSP0T TEAM",
+            Text = autoFarmEnabled and "Normal Speed ON" or "Normal Speed OFF",
+            Duration = 3
+        })
+    end
+end)
+
+print("DARKSP0T TEAM | Press V to dash | RightShift to toggle normal speed")
